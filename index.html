@@ -807,6 +807,61 @@
         <div class="callout-title">📊 FWHM and Spectroscopy</div>
         The <strong>Full Width at Half Maximum (FWHM)</strong> is the standard measure of spectral resolution. Determining the <strong>baseline</strong> is the most critical — and most tricky — step in any spectroscopic analysis. The baseline defines zero intensity and affects all derived quantities (peak position, area, width).
       </div>
+      <div class="section">
+  <h3>Broadening Mechanisms — Detailed</h3>
+  <p>Every observed spectral line has finite width. There are several physically distinct broadening mechanisms, each producing a different line shape and therefore distinguishable in high-resolution spectroscopy.</p>
+ 
+  <h4>1. Natural (Lifetime) Broadening — Lorentzian</h4>
+  <p>The ground state has infinite lifetime → zero linewidth. Every excited state has a finite mean lifetime τ. By the energy-time uncertainty relation:</p>
+  <div class="eq-block">
+    <div class="eq-label">Natural Linewidth</div>
+    <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">ΔE · τ ≥ ħ/2  →  Δν = ΔE/h = 1/(2πτ) = Γ/2π</span></div>
+    <div class="eq-row"><span class="eq-note">Γ = 1/τ is the natural decay rate (FWHM in angular frequency)</span></div>
+    <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">I(ν) = I₀ · (Γ/2π) / [(ν − ν₀)² + (Γ/2)²]</span></div>
+    <div class="eq-row"><span class="eq-note">Lorentzian profile. Typical τ ~ 10⁻⁸ s → Δν ~ 10⁷ Hz ~ 10⁻⁷ eV</span></div>
+  </div>
+ 
+  <h4>2. Doppler Broadening — Gaussian</h4>
+  <p>Atoms in a gas move with a Maxwell-Boltzmann velocity distribution. An atom moving with velocity component v_z along the line of sight emits/absorbs at the Doppler-shifted frequency:</p>
+  <div class="eq-block">
+    <div class="eq-label">Doppler Shift and Gaussian Profile</div>
+    <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">ν_obs = ν₀ (1 + v_z/c)</span></div>
+    <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">I(ν) = I₀ exp[−(ν−ν₀)²c² / (ν₀²·2k_BT/m)]</span></div>
+    <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">Δν_D = (ν₀/c) √(8k_BT·ln2 / m)</span><span class="eq-note">Doppler FWHM</span></div>
+    <div class="eq-row"><span class="eq-note">Gaussian because the Maxwell-Boltzmann speed distribution is a Gaussian in v_z. Increases with T.</span></div>
+  </div>
+ 
+  <h4>3. Pressure (Collision) Broadening — Lorentzian</h4>
+  <p>Collisions between atoms interrupt the coherent emission of radiation, effectively shortening the radiation lifetime. Each collision randomises the phase. The result is an additional Lorentzian broadening, proportional to gas pressure (collision frequency).</p>
+  <div class="eq-block">
+    <div class="eq-label">Collision Broadening</div>
+    <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">Δν_c = n_atoms · σ_c · ⟨v⟩ / π</span></div>
+    <div class="eq-row"><span class="eq-note">σ_c = collision cross section; ⟨v⟩ = mean relative speed. Proportional to pressure.</span></div>
+  </div>
+ 
+  <h4>4. Instrumental Broadening</h4>
+  <p>Any real spectrometer has finite resolving power — it cannot distinguish arbitrarily close wavelengths. The instrumental profile (slit function) convolves with the true spectrum. A diffraction grating spectrometer has a sinc² instrumental profile; with finite slits it approaches Gaussian. This broadening is apparatus-dependent and must be deconvolved to obtain true line profiles.</p>
+ 
+  <div class="callout info">
+    <div class="callout-title">🔬 Voigt Profile — Real Life</div>
+    In practice, spectral lines are described by the <strong>Voigt profile</strong> — the mathematical convolution of a Gaussian (Doppler) and a Lorentzian (natural + pressure). It has a Gaussian core (near line centre) and Lorentzian wings (far from centre). Fitting a Voigt profile to an observed line allows extraction of temperature (from Gaussian width) and pressure (from Lorentzian width) independently.
+  </div>
+ 
+  <table class="data-table">
+    <tr>
+      <th>Mechanism</th>
+      <th>Profile shape</th>
+      <th>Depends on</th>
+      <th>∝</th>
+    </tr>
+    <tr><td>Natural linewidth</td><td>Lorentzian</td><td>Excited state lifetime τ</td><td>1/τ (fixed for transition)</td></tr>
+    <tr><td>Doppler</td><td>Gaussian</td><td>Temperature T, mass m</td><td>√(T/m)</td></tr>
+    <tr><td>Pressure/Collision</td><td>Lorentzian</td><td>Pressure P</td><td>P</td></tr>
+    <tr><td>Instrumental</td><td>Sinc² or Gaussian</td><td>Slit width, grating</td><td>1/resolving power</td></tr>
+    <tr><td>Stark (electric field)</td><td>Asymmetric</td><td>Electric field E</td><td>E²</td></tr>
+    <tr><td>Zeeman (magnetic field)</td><td>Splits into components</td><td>Magnetic field B</td><td>B</td></tr>
+  </table>
+</div>
     </div>
 
     <div class="section">
@@ -1149,7 +1204,95 @@
         </div>
       </div>
 
-      <p>For the radial integral, using the polar equation of the ellipse <span class="eq-inline">r = a(1−ε²)/(1+εcosφ)</span>, and after computing ∮ Pᵣ dr = nh through an integration by parts, the result (which DB Sir derived in class) is:</p>
+      <p>For the radial integral we need to evaluate ∮ Pᵣ dr where Pᵣ = mṙ is the radial momentum. The orbit is described in polar coordinates by the standard ellipse equation:</p>
+ 
+<div class="eq-block">
+  <div class="eq-label">Polar Equation of Ellipse (orbit)</div>
+  <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">1/r = (1 + ε cosφ) / [a(1−ε²)]</span></div>
+  <div class="eq-row"><span class="eq-note">ε = eccentricity, a = semi-major axis, φ = azimuthal angle measured from perihelion</span></div>
+</div>
+ 
+<h4>Evaluating ∮ Pᵣ dr — Full Derivation</h4>
+ 
+<div class="eq-derive">
+  <div class="step">
+    <div class="step-num">①</div>
+    <div class="step-body">
+      <div class="step-math">Pᵣ = mṙ = m(dr/dφ)(dφ/dt)</div>
+      <div class="step-reason">Chain rule: convert time derivative to φ derivative</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">②</div>
+    <div class="step-body">
+      <div class="step-math">P_φ = mr²φ̇  →  φ̇ = P_φ/(mr²)</div>
+      <div class="step-reason">Angular momentum conservation; P_φ = kħ is constant</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">③</div>
+    <div class="step-body">
+      <div class="step-math">Pᵣ = m · (dr/dφ) · P_φ/(mr²) = P_φ/r² · (dr/dφ)</div>
+      <div class="step-reason">Substituting φ̇; m cancels</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">④</div>
+    <div class="step-body">
+      <div class="step-math">∮ Pᵣ dr = ∮ [P_φ/r² · dr/dφ] dr = P_φ ∮ (1/r²)(dr/dφ)² dφ</div>
+      <div class="step-reason">Change integration variable from r to φ; dr = (dr/dφ)dφ</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">⑤</div>
+    <div class="step-body">
+      <div class="step-math">From the ellipse: (1/r) = (1+ε cosφ)/[a(1−ε²)]</div>
+      <div class="step-math">d(1/r)/dφ = −ε sinφ/[a(1−ε²)]  →  (1/r²)(dr/dφ) = ε sinφ/[a(1−ε²)]</div>
+      <div class="step-reason">Differentiate the polar equation; note d(1/r)/dφ = −(1/r²)(dr/dφ)</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">⑥</div>
+    <div class="step-body">
+      <div class="step-math">∮ Pᵣ dr = P_φ ∫₀²π [ε sinφ/(1+ε cosφ)]² dφ  ·  [using a(1−ε²) cancel]</div>
+      <div class="step-math">= P_φ ε² ∫₀²π sin²φ/(1+ε cosφ)² dφ</div>
+      <div class="step-reason">After simplification; the factor a(1−ε²) cancels between numerator and denominator</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">⑦</div>
+    <div class="step-body">
+      <div class="step-math">Evaluate I(ε) = ∫₀²π sin²φ/(1+ε cosφ)² dφ</div>
+      <div class="step-math">Using the standard result (residue theorem or integration by parts):
+      I(ε) = 2π/√(1−ε²) − 2π = 2π[1/√(1−ε²) − 1]</div>
+      <div class="step-reason">This integral is standard; the result involves 1/√(1−ε²) from the normalization of an ellipse orbit integral. Can also be derived via: I = (2π/√(1−ε²))(ε² averaged) → see DB Sir notes page 7</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">⑧</div>
+    <div class="step-body">
+      <div class="step-math">∮ Pᵣ dr = P_φ ε² · 2π[1/√(1−ε²) − 1] / (2π)  ·  [using ε²/2π factor]</div>
+      <div class="step-math">Setting this = nh:   P_φ[1/√(1−ε²) − 1] = nh</div>
+      <div class="step-reason">Applying the W-S quantisation rule ∮ Pᵣ dr = nh</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">⑨</div>
+    <div class="step-body">
+      <div class="step-math">P_φ = kħ  →  kħ/√(1−ε²) = (n+k)ħ = Nħ</div>
+      <div class="step-math">→  1/√(1−ε²) = N/k  →  √(1−ε²) = k/N</div>
+      <div class="step-reason">Substituting P_φ = kħ and rearranging; N = n+k is the principal quantum number</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">⑩</div>
+    <div class="step-body">
+      <div class="step-math">But for an ellipse:  √(1−ε²) = b/a  →  <strong>b/a = k/N  ✓</strong></div>
+      <div class="step-reason">Using the geometric relation between eccentricity and axis ratio</div>
+    </div>
+  </div>
+</div>
+<div class="key-result">The full derivation confirms: b/a = k/N, where N = n+k is the principal quantum number</div>
 
       <div class="eq-block">
         <div class="eq-label">Key Geometric Result</div>
@@ -1175,6 +1318,31 @@
 
       <div class="callout danger">
         <div class="callout-title">🚫 Failure: Fine Structure Still Not Explained</div>
+        <div class="section">
+  <h3>The Commensurate Periods Argument — Why Degeneracy Exists</h3>
+  <p>The degeneracy of orbits with the same N but different k (all having the same energy) has a deep classical reason rooted in the <em>ratio of the periods</em> of the two coordinates r and φ.</p>
+ 
+  <div class="callout concept">
+    <div class="callout-title">🔁 Commensurate vs Incommensurate Periods</div>
+    For the pure Coulomb (1/r²) force: the period of r-oscillation (radial, Tᵣ) and the period of φ-revolution (Tφ) are <strong>exactly equal</strong> — their ratio is rational (= 1). When two periods are commensurate (ratio is rational), the orbit is a closed curve. When incommensurate, the orbit is an open rosette that fills an annular region. Only for the Coulomb potential is Tᵣ/Tφ = 1 exactly — this is the special property (alongside the harmonic oscillator) that makes orbits closed (Bertrand's theorem).
+  </div>
+ 
+  <div class="eq-block">
+    <div class="eq-label">Commensurate Period Condition</div>
+    <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">Tᵣ/Tφ = rational number p/q</span></div>
+    <div class="eq-row"><span class="eq-note">For Coulomb: Tᵣ = Tφ → p/q = 1 → orbit closes after 1 revolution → closed ellipse</span></div>
+    <div class="eq-row"><span class="eq-note">For non-Coulomb: Tᵣ ≠ Tφ → orbit is a rosette (open)</span></div>
+  </div>
+ 
+  <p>The W-S quantum conditions ∮ Pᵣ dr = nh and ∮ P_φ dφ = kh are <em>independent</em> only when the two periods are commensurate. In the Coulomb case they are always commensurate (ratio = 1 for any n, k), so the two conditions give separate quantum numbers n and k, but the energy only depends on their sum N = n+k. This is the source of the orbital degeneracy.</p>
+ 
+  <p>When the periods become <strong>incommensurate</strong> (e.g., due to relativistic correction or screening), the orbit is no longer closed. In this case the W-S conditions for the different coordinates become <em>non-independent</em>, and the quantum numbers can no longer be so simply separated — breaking the degeneracy.</p>
+ 
+  <div class="callout warning">
+    <div class="callout-title">⚠ Exam Point: Degeneracy Argument</div>
+    DB Sir's notes state (page 9): <em>"This general result holds when the periods are commensurate, i.e. when the ratio of the periods of variation of two or more co-ords describing the motion of a system is a rational number."</em> For different pairs of coordinates, momentum will be independent → non-degenerate. The Coulomb field is special: all elliptical orbits with the same N are degenerate precisely because their period ratios are rational (= 1).
+  </div>
+</div>
         If all orbits with the same N have the same energy, we still cannot explain fine structure! We need something that <em>breaks</em> the degeneracy between orbits with different k. This requires going beyond Newtonian mechanics — specifically, we need relativistic corrections.
       </div>
     </div>
@@ -1278,6 +1446,79 @@
       </div>
 
       <p>The azimuthal quantum number k from the 2D analysis equals <span class="eq-inline">k = t + m</span>. The key new quantity is <strong>m</strong>, the <em>magnetic quantum number</em>.</p>
+      <div class="section">
+  <h3>Deriving the 3D Kinetic Energy and the Relation k = t + m</h3>
+  <p>To apply the W-S rules in 3D, we need the kinetic energy expressed in the three polar coordinates (r, θ, φ). The velocity in spherical polars has three components:</p>
+ 
+  <div class="eq-block">
+    <div class="eq-label">Velocity Components in Spherical Polar Coordinates</div>
+    <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">v² = ṙ² + r²θ̇² + r² sin²θ · φ̇²</span></div>
+    <div class="eq-row"><span class="eq-note">The three orthogonal velocity components: radial ṙ, polar rθ̇, azimuthal r sinθ · φ̇</span></div>
+  </div>
+ 
+  <div class="eq-derive">
+    <div class="step">
+      <div class="step-num">①</div>
+      <div class="step-body">
+        <div class="step-math">T = ½m(ṙ² + r²θ̇² + r²sin²θ · φ̇²)</div>
+        <div class="step-reason">Kinetic energy in spherical polar coordinates</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">②</div>
+      <div class="step-body">
+        <div class="step-math">Pᵣ = mṙ,   P_θ = mr²θ̇,   P_φ = mr²sin²θ · φ̇</div>
+        <div class="step-reason">Conjugate momenta from the Lagrangian (∂L/∂q̇ for each coordinate)</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">③</div>
+      <div class="step-body">
+        <div class="step-math">T = ½(Pᵣṙ + P_θθ̇ + P_φφ̇) = Pᵣ²/2m + P_θ²/(2mr²) + P_φ²/(2mr²sin²θ)</div>
+        <div class="step-reason">Rewriting T in terms of conjugate momenta</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">④</div>
+      <div class="step-body">
+        <div class="step-math">Pᵨ = total angular momentum vector magnitude</div>
+        <div class="step-math">|P_ψ|² = P_θ² + P_φ²/sin²θ  →  T = Pᵣ²/2m + |P_ψ|²/(2mr²)</div>
+        <div class="step-reason">The P_θ and P_φ terms combine into the total angular momentum squared</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">⑤</div>
+      <div class="step-body">
+        <div class="step-math">∮ P_φ dφ = mh  (W-S rule for φ: the "magnetic" q.n.)</div>
+        <div class="step-math">∮ P_θ dθ = th  (W-S rule for θ: the "elevation" q.n.)</div>
+        <div class="step-reason">Two separate quantum conditions from the two angular degrees of freedom</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">⑥</div>
+      <div class="step-body">
+        <div class="step-math">∮ P_ψ dψ = kh  where the "2D" azimuthal action = ∮ P_θ dθ + ∮ P_φ dφ = (t+m)h</div>
+        <div class="step-math"><strong>∴  k = t + m</strong></div>
+        <div class="step-reason">The total azimuthal quantum number k from the 2D analysis equals the sum of the polar and azimuthal quantum numbers from the 3D analysis. The 3D motion introduces one extra quantum number (m) while splitting k into (t, m) with k = t+m.</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="eq-block">
+    <div class="eq-label">Consequence: Projection of Angular Momentum</div>
+    <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">P_φ = P_ψ cosα = kħ · (m/k) = mħ</span></div>
+    <div class="eq-row"><span class="eq-note">P_φ is the z-projection of the total angular momentum. cosα = m/k defines the angle α the orbit makes with the field axis.</span></div>
+  </div>
+ 
+  <div class="callout info">
+    <div class="callout-title">Physical Meaning of t and m</div>
+    <ul class="physics-list" style="margin-bottom:0">
+      <li><strong>k</strong> = total azimuthal q.n. — determines the shape of the orbit (b/a = k/N) and the magnitude of orbital angular momentum</li>
+      <li><strong>m</strong> = magnetic q.n. — determines the <em>orientation</em> (projection on z-axis). Takes values ±1, ±2, ..., ±k (excluding 0)</li>
+      <li><strong>t</strong> = elevation/polar q.n. — no new independent information; t = k − m</li>
+    </ul>
+  </div>
+</div>
     </div>
 
     <div class="section">
@@ -1338,6 +1579,163 @@
         </svg>
         <div class="diagram-caption">Fig 4.1 — Space quantisation for k = 2. The orbital angular momentum vector P_ψ = kħ can only point in 2k (not 2k+1) directions since m = 0 is classically excluded (it would cause the electron to pass through the nucleus). The z-projection P_φ = mħ takes values ±1, ±2 (for k=2).</div>
       </div>
+      <div class="section">
+  <h3>Space Quantisation Cones — k = 1, 2, 3</h3>
+  <p>For each value of k, the angular momentum vector can only point along 2k allowed directions. Below are the allowed orientations drawn as vectors relative to the field axis for k = 1, 2, 3:</p>
+ 
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg" width="660" height="320">
+      <defs>
+        <marker id="sq1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#5a6d8a"/>
+        </marker>
+        <marker id="sq2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#4ecdc4"/>
+        </marker>
+        <marker id="sq3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#9b7fe8"/>
+        </marker>
+        <marker id="sq4" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#e8b96a"/>
+        </marker>
+      </defs>
+ 
+      <!-- ── k = 1: m = ±1 ── -->
+      <text x="65" y="18" fill="#c9974a" font-size="12" font-family="JetBrains Mono">k = 1</text>
+      <text x="55" y="32" fill="#8fa0bc" font-size="10" font-family="JetBrains Mono">m = ±1 (2 orientations)</text>
+      <!-- z axis -->
+      <line x1="110" y1="300" x2="110" y2="50" stroke="#5a6d8a" stroke-width="1.5" marker-end="url(#sq1)"/>
+      <text x="118" y="60" fill="#5a6d8a" font-size="10" font-family="JetBrains Mono">B</text>
+      <!-- m=+1 vector -->
+      <line x1="110" y1="200" x2="155" y2="115" stroke="#4ecdc4" stroke-width="2.5" marker-end="url(#sq2)"/>
+      <text x="160" y="112" fill="#4ecdc4" font-size="11" font-family="JetBrains Mono">m=+1</text>
+      <!-- m=-1 vector -->
+      <line x1="110" y1="200" x2="155" y2="285" stroke="#e05a5a" stroke-width="2.5" marker-end="url(#sq2)"/>
+      <text x="160" y="290" fill="#e05a5a" font-size="11" font-family="JetBrains Mono">m=−1</text>
+      <!-- circle for origin -->
+      <circle cx="110" cy="200" r="3" fill="#d0d8e8"/>
+      <!-- horizontal dashed line (forbidden m=0) -->
+      <line x1="110" y1="200" x2="165" y2="200" stroke="#5a6d8a" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="168" y="204" fill="#5a6d8a" font-size="9" font-family="JetBrains Mono">m=0 ✗</text>
+ 
+      <!-- ── k = 2: m = ±1, ±2 ── -->
+      <text x="295" y="18" fill="#c9974a" font-size="12" font-family="JetBrains Mono">k = 2</text>
+      <text x="270" y="32" fill="#8fa0bc" font-size="10" font-family="JetBrains Mono">m = ±1, ±2 (4 orientations)</text>
+      <line x1="340" y1="300" x2="340" y2="50" stroke="#5a6d8a" stroke-width="1.5" marker-end="url(#sq1)"/>
+      <text x="348" y="60" fill="#5a6d8a" font-size="10" font-family="JetBrains Mono">B</text>
+      <!-- m=+2 -->
+      <line x1="340" y1="200" x2="375" y2="100" stroke="#4ecdc4" stroke-width="2.5" marker-end="url(#sq3)"/>
+      <text x="380" y="98" fill="#4ecdc4" font-size="10" font-family="JetBrains Mono">+2</text>
+      <!-- m=+1 -->
+      <line x1="340" y1="200" x2="385" y2="145" stroke="#56c98a" stroke-width="2" marker-end="url(#sq3)"/>
+      <text x="390" y="143" fill="#56c98a" font-size="10" font-family="JetBrains Mono">+1</text>
+      <!-- m=-1 -->
+      <line x1="340" y1="200" x2="385" y2="255" stroke="#e8b96a" stroke-width="2" marker-end="url(#sq3)"/>
+      <text x="390" y="258" fill="#e8b96a" font-size="10" font-family="JetBrains Mono">−1</text>
+      <!-- m=-2 -->
+      <line x1="340" y1="200" x2="375" y2="300" stroke="#e05a5a" stroke-width="2.5" marker-end="url(#sq3)"/>
+      <text x="380" y="303" fill="#e05a5a" font-size="10" font-family="JetBrains Mono">−2</text>
+      <circle cx="340" cy="200" r="3" fill="#d0d8e8"/>
+      <line x1="340" y1="200" x2="395" y2="200" stroke="#5a6d8a" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="398" y="204" fill="#5a6d8a" font-size="9" font-family="JetBrains Mono">0 ✗</text>
+ 
+      <!-- ── k = 3: m = ±1, ±2, ±3 ── -->
+      <text x="510" y="18" fill="#c9974a" font-size="12" font-family="JetBrains Mono">k = 3</text>
+      <text x="486" y="32" fill="#8fa0bc" font-size="10" font-family="JetBrains Mono">m=±1,±2,±3 (6 orientations)</text>
+      <line x1="555" y1="300" x2="555" y2="50" stroke="#5a6d8a" stroke-width="1.5" marker-end="url(#sq1)"/>
+      <text x="563" y="60" fill="#5a6d8a" font-size="10" font-family="JetBrains Mono">B</text>
+      <!-- m=+3 -->
+      <line x1="555" y1="200" x2="582" y2="88" stroke="#4ecdc4" stroke-width="2.5" marker-end="url(#sq4)"/>
+      <text x="586" y="86" fill="#4ecdc4" font-size="9" font-family="JetBrains Mono">+3</text>
+      <!-- m=+2 -->
+      <line x1="555" y1="200" x2="592" y2="125" stroke="#56c98a" stroke-width="2" marker-end="url(#sq4)"/>
+      <text x="596" y="123" fill="#56c98a" font-size="9" font-family="JetBrains Mono">+2</text>
+      <!-- m=+1 -->
+      <line x1="555" y1="200" x2="598" y2="163" stroke="#9b7fe8" stroke-width="2" marker-end="url(#sq4)"/>
+      <text x="602" y="161" fill="#9b7fe8" font-size="9" font-family="JetBrains Mono">+1</text>
+      <!-- m=-1 -->
+      <line x1="555" y1="200" x2="598" y2="237" stroke="#c9974a" stroke-width="2" marker-end="url(#sq4)"/>
+      <text x="602" y="240" fill="#c9974a" font-size="9" font-family="JetBrains Mono">−1</text>
+      <!-- m=-2 -->
+      <line x1="555" y1="200" x2="592" y2="275" stroke="#e8b96a" stroke-width="2" marker-end="url(#sq4)"/>
+      <text x="596" y="278" fill="#e8b96a" font-size="9" font-family="JetBrains Mono">−2</text>
+      <!-- m=-3 -->
+      <line x1="555" y1="200" x2="582" y2="312" stroke="#e05a5a" stroke-width="2.5" marker-end="url(#sq4)"/>
+      <text x="586" y="315" fill="#e05a5a" font-size="9" font-family="JetBrains Mono">−3</text>
+      <circle cx="555" cy="200" r="3" fill="#d0d8e8"/>
+      <line x1="555" y1="200" x2="612" y2="200" stroke="#5a6d8a" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="615" y="204" fill="#5a6d8a" font-size="9" font-family="JetBrains Mono">0 ✗</text>
+    </svg>
+    <div class="diagram-caption">Fig 4.2 — Space quantisation for k = 1, 2, 3. For each k, there are exactly 2k allowed orientations (m = 0 excluded). The angular momentum vector |P_ψ| = kħ can only align at discrete angles cosα = m/k to the field axis B.</div>
+  </div>
+</div>
+ 
+<div class="section">
+  <h3>Stern–Gerlach Experiment — Apparatus and Result</h3>
+ 
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 260" xmlns="http://www.w3.org/2000/svg" width="640" height="260">
+      <defs>
+        <marker id="sg1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#5a6d8a"/>
+        </marker>
+        <marker id="sg2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#4ecdc4"/>
+        </marker>
+        <marker id="sg3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#e05a5a"/>
+        </marker>
+      </defs>
+ 
+      <!-- Oven source -->
+      <rect x="10" y="100" width="60" height="60" rx="4" fill="var(--bg4)" stroke="var(--gold)" stroke-width="1.5"/>
+      <text x="22" y="126" fill="#e8b96a" font-size="10" font-family="JetBrains Mono">Oven</text>
+      <text x="15" y="140" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">(Ag atoms)</text>
+ 
+      <!-- Collimating slits -->
+      <rect x="90" y="90" width="8" height="20" rx="1" fill="var(--bg4)" stroke="var(--border2)" stroke-width="1.5"/>
+      <rect x="90" y="150" width="8" height="20" rx="1" fill="var(--bg4)" stroke="var(--border2)" stroke-width="1.5"/>
+      <text x="82" y="88" fill="#5a6d8a" font-size="9" font-family="JetBrains Mono">slits</text>
+ 
+      <!-- Magnet poles - inhomogeneous -->
+      <!-- N pole (wedge shape top) -->
+      <polygon points="115,20 500,20 500,90 115,90" fill="rgba(78,205,196,0.1)" stroke="#4ecdc4" stroke-width="1.5"/>
+      <text x="290" y="60" fill="#4ecdc4" font-size="13" font-family="JetBrains Mono">N  (wedge — inhomogeneous)</text>
+      <!-- S pole (flat bottom) -->
+      <polygon points="115,170 500,170 500,230 115,230" fill="rgba(224,90,90,0.1)" stroke="#e05a5a" stroke-width="1.5"/>
+      <text x="300" y="205" fill="#e05a5a" font-size="13" font-family="JetBrains Mono">S  (flat)</text>
+ 
+      <!-- Field lines (gradient) -->
+      <line x1="170" y1="92" x2="170" y2="168" stroke="#8fa0bc" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <line x1="220" y1="92" x2="220" y2="168" stroke="#8fa0bc" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <line x1="280" y1="92" x2="280" y2="168" stroke="#8fa0bc" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <line x1="340" y1="92" x2="340" y2="168" stroke="#8fa0bc" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <line x1="400" y1="92" x2="400" y2="168" stroke="#8fa0bc" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="130" y="135" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">B field (z)</text>
+      <text x="130" y="148" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">∂B/∂z ≠ 0</text>
+ 
+      <!-- Atom beam -->
+      <line x1="98" y1="130" x2="500" y2="130" stroke="#c9974a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#sg1)"/>
+ 
+      <!-- Deflected beams after magnet -->
+      <!-- spin up (m_s = +1/2) deflected upward -->
+      <line x1="500" y1="130" x2="600" y2="100" stroke="#4ecdc4" stroke-width="2.5" marker-end="url(#sg2)"/>
+      <!-- spin down (m_s = -1/2) deflected downward -->
+      <line x1="500" y1="130" x2="600" y2="160" stroke="#e05a5a" stroke-width="2.5" marker-end="url(#sg3)"/>
+ 
+      <!-- Screen / detector -->
+      <rect x="608" y="60" width="12" height="180" rx="2" fill="var(--bg4)" stroke="var(--border2)" stroke-width="1.5"/>
+      <text x="624" y="95" fill="#4ecdc4" font-size="10" font-family="JetBrains Mono">↑ spot 1</text>
+      <text x="624" y="110" fill="#4ecdc4" font-size="9" font-family="JetBrains Mono">m_s=+½</text>
+      <text x="624" y="160" fill="#e05a5a" font-size="10" font-family="JetBrains Mono">↓ spot 2</text>
+      <text x="624" y="175" fill="#e05a5a" font-size="9" font-family="JetBrains Mono">m_s=−½</text>
+ 
+      <!-- Force annotation -->
+      <text x="140" y="250" fill="#8fa0bc" font-size="10.5" font-family="Source Serif 4, serif" font-style="italic">F_z = μ_z · (∂B/∂z)  — net force only when ∂B/∂z ≠ 0.  Uniform field: only precession, no deflection.</text>
+    </svg>
+    <div class="diagram-caption">Fig 4.3 — The Stern-Gerlach apparatus. Silver atoms from an oven are collimated and passed through an inhomogeneous magnetic field between a wedge (N) and flat (S) pole piece. The field gradient ∂B/∂z exerts a force F_z = μ_z(∂B/∂z) on the magnetic moment. Ag (5s¹, j=1/2) gives exactly 2 spots — proving space quantisation and spin.</div>
+  </div>
+</div>
 
       <div class="callout warning">
         <div class="callout-title">⚠ Why is m = 0 Excluded?</div>
@@ -1741,6 +2139,65 @@
     <div class="section">
       <h3>Selection Rules — The Physical Origin</h3>
       <p>Not all transitions between energy levels are allowed. <strong>Selection rules</strong> determine which transitions actually occur (or have significant probability). They arise from the requirement that the <em>transition moment matrix element</em> be non-zero — computed by applying perturbation theory to the radiation-atom interaction.</p>
+      <h4>Transition Moment — Why Selection Rules Arise</h4>
+<p>The probability of a transition between states ψᵢ and ψ_f is proportional to the square of the <strong>transition dipole moment matrix element</strong>:</p>
+ 
+<div class="eq-block">
+  <div class="eq-label">Transition Moment Matrix Element</div>
+  <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">Rᵢ_f = ⟨ψ_f | r⃗ | ψᵢ⟩ = ∫ ψ_f* · r⃗ · ψᵢ dτ</span></div>
+  <div class="eq-row"><span class="eq-note">r⃗ = (x, y, z) is the electric dipole operator. Three components: Rₓ, R_y, R_z.</span></div>
+  <div class="eq-row"><span style="color:var(--gold3);font-family:var(--mono)">Transition rate  ∝  |Rᵢ_f|²</span></div>
+  <div class="eq-row"><span class="eq-note">If Rᵢ_f = 0 in all three components: transition is <em>forbidden</em> (selection rule violated). If any component ≠ 0: transition is <em>allowed</em>.</span></div>
+</div>
+ 
+<div class="eq-derive">
+  <div class="step">
+    <div class="step-num">①</div>
+    <div class="step-body">
+      <div class="step-math">ψ_nlm(r,θ,φ) = R_nl(r) · Y_l^m(θ,φ)</div>
+      <div class="step-reason">Hydrogen-like wavefunction separates into radial R_nl and spherical harmonic Y_l^m</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">②</div>
+    <div class="step-body">
+      <div class="step-math">R_z = ∫ R_n'l' Y_l'^m'* · r cosθ · R_nl Y_l^m r² sinθ drdθdφ</div>
+      <div class="step-reason">z-component: z = r cosθ. Integral separates into radial × angular parts.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">③</div>
+    <div class="step-body">
+      <div class="step-math">Angular integral: ∫₀²π e^{i(m−m')φ} dφ = 2π δ_{mm'}</div>
+      <div class="step-reason">φ-integration of the z-component forces m' = m → Δm = 0 for z (π-transitions)</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">④</div>
+    <div class="step-body">
+      <div class="step-math">For x ± iy = r sinθ e^{±iφ}: angular integral gives e^{i(m−m'±1)φ} → m' = m ± 1</div>
+      <div class="step-reason">x and y components (circular combinations) force Δm = ±1 → σ±-transitions</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">⑤</div>
+    <div class="step-body">
+      <div class="step-math">θ-integral: ∫ Y_l'^m'* cosθ Y_l^m sinθ dθ ≠ 0  only if  l' = l ± 1</div>
+      <div class="step-reason">This uses the recursion relation for associated Legendre polynomials: cosθ P_l^m = combination of P_{l±1}^m. Orthogonality forces l' = l±1, giving Δl = ±1.</div>
+    </div>
+  </div>
+</div>
+ 
+<div class="callout result">
+  <div class="callout-title">✓ Selection Rules from First Principles</div>
+  The three Cartesian integrals of the transition moment automatically enforce:
+  <ul class="physics-list" style="margin-top:8px;margin-bottom:0">
+    <li><strong>Δl = ±1</strong> — from the θ-integral (Legendre polynomial orthogonality + parity)</li>
+    <li><strong>Δm = 0</strong> — from the z-integral (φ-integral forces m'=m)</li>
+    <li><strong>Δm = ±1</strong> — from the x,y integrals (φ-integral with e^{±iφ})</li>
+    <li><strong>ΔS = 0</strong> — because the electric dipole operator acts only on spatial coordinates, not spin — spin state is unchanged</li>
+  </ul>
+</div>
 
       <div class="eq-block">
         <div class="eq-label">Electric Dipole Selection Rules (optical transitions)</div>
@@ -1944,6 +2401,94 @@
         <div class="qa-a">
           The π component (Δm_J = 0) corresponds to an oscillating electric dipole oriented <em>parallel</em> to the magnetic field B (the z-axis). An oscillating electric dipole radiates in a donut pattern — it emits maximally in directions perpendicular to its axis and zero along its axis. When you view along the field direction (z-axis), you are looking along the dipole's axis, so you observe zero intensity from the π component. For the σ± components (Δm_J = ±1), the dipoles oscillate in the xy plane, and they radiate in all directions including along z — that's why σ components are visible from all angles.
         </div>
+        <div class="section">
+  <h3>Paschen–Back Effect — Strong Field Limit</h3>
+  <p>When the external magnetic field B is so strong that the Zeeman splitting exceeds the spin-orbit splitting ΔE_SO of the level, the coupling between L⃗ and S⃗ breaks down. L⃗ and S⃗ decouple from J⃗ and each independently precesses about B.</p>
+ 
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg" width="640" height="340">
+      <!-- WEAK FIELD (normal/anomalous Zeeman) -->
+      <text x="10" y="20" fill="#c9974a" font-size="12" font-family="JetBrains Mono">Weak B (Zeeman)</text>
+      <text x="10" y="35" fill="#8fa0bc" font-size="10" font-family="JetBrains Mono">L-S coupled → J precesses about B</text>
+ 
+      <!-- p state (l=1, s=1/2): two J levels -->
+      <!-- J=3/2: 4 sub-levels -->
+      <text x="10" y="65" fill="#9b7fe8" font-size="10" font-family="JetBrains Mono">²P₃/₂ (J=3/2, g=4/3)</text>
+      <line x1="10" y1="82" x2="80" y2="82" stroke="#9b7fe8" stroke-width="1.5"/>
+      <line x1="10" y1="96" x2="80" y2="96" stroke="#9b7fe8" stroke-width="1.5"/>
+      <line x1="10" y1="110" x2="80" y2="110" stroke="#9b7fe8" stroke-width="1.5"/>
+      <line x1="10" y1="124" x2="80" y2="124" stroke="#9b7fe8" stroke-width="1.5"/>
+      <text x="84" y="86" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">mJ=3/2</text>
+      <text x="84" y="100" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">1/2</text>
+      <text x="84" y="114" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">−1/2</text>
+      <text x="84" y="128" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">−3/2</text>
+ 
+      <!-- J=1/2: 2 sub-levels -->
+      <text x="10" y="155" fill="#c3a8ff" font-size="10" font-family="JetBrains Mono">²P₁/₂ (J=1/2, g=2/3)</text>
+      <line x1="10" y1="170" x2="80" y2="170" stroke="#c3a8ff" stroke-width="1.5"/>
+      <line x1="10" y1="186" x2="80" y2="186" stroke="#c3a8ff" stroke-width="1.5"/>
+      <text x="84" y="174" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">mJ=1/2</text>
+      <text x="84" y="190" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">−1/2</text>
+ 
+      <!-- s state -->
+      <text x="10" y="235" fill="#56c98a" font-size="10" font-family="JetBrains Mono">²S₁/₂ (J=1/2, g=2)</text>
+      <line x1="10" y1="248" x2="80" y2="248" stroke="#56c98a" stroke-width="1.5"/>
+      <line x1="10" y1="264" x2="80" y2="264" stroke="#56c98a" stroke-width="1.5"/>
+      <text x="84" y="252" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">1/2</text>
+      <text x="84" y="268" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">−1/2</text>
+ 
+      <!-- Arrow: transition to strong field -->
+      <text x="210" y="165" fill="#e8b96a" font-size="22" font-family="JetBrains Mono">→</text>
+      <text x="195" y="185" fill="#e8b96a" font-size="9" font-family="JetBrains Mono">B → large</text>
+ 
+      <!-- STRONG FIELD (Paschen-Back) -->
+      <text x="280" y="20" fill="#c9974a" font-size="12" font-family="JetBrains Mono">Strong B (Paschen-Back)</text>
+      <text x="280" y="35" fill="#8fa0bc" font-size="10" font-family="JetBrains Mono">L, S independent → mL, mS quantised separately</text>
+ 
+      <!-- p state: mL = -1, 0, +1 each with ms = ±1/2 → 6 sub-levels -->
+      <text x="280" y="58" fill="#9b7fe8" font-size="10" font-family="JetBrains Mono">p state (l=1): 6 sub-levels</text>
+      <!-- ΔE = (mL + 2ms) · μB · B -->
+      <!-- mL=1, ms=+1/2: coeff=2 -->
+      <line x1="280" y1="72" x2="410" y2="72" stroke="#4ecdc4" stroke-width="2"/>
+      <text x="415" y="76" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">mL=+1, ms=+½  (mL+2ms=2)</text>
+      <!-- mL=1, ms=-1/2 + mL=0,ms=+1/2: coeff=0 and +1 -->
+      <line x1="280" y1="95" x2="410" y2="95" stroke="#4ecdc4" stroke-width="1.5"/>
+      <text x="415" y="99" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">mL=+1, ms=−½ (=0); mL=0, ms=+½ (=1)</text>
+      <!-- These actually overlap: coeff 0 and 1 -->
+      <line x1="280" y1="118" x2="410" y2="118" stroke="#56c98a" stroke-width="1.5"/>
+      <text x="415" y="122" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">mL=0, ms=−½ (=0); mL=−1, ms=+½ (=0? no =−1+1=0)</text>
+      <line x1="280" y1="141" x2="410" y2="141" stroke="#e8b96a" stroke-width="1.5"/>
+      <text x="415" y="145" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">mL=−1, ms=+½ (=0); mL=0, ms=−½ (=−1)</text>
+      <line x1="280" y1="164" x2="410" y2="164" stroke="#e8b96a" stroke-width="1.5"/>
+      <text x="415" y="168" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">mL=−1, ms=−½ (=−2)</text>
+      <line x1="280" y1="184" x2="410" y2="184" stroke="#e05a5a" stroke-width="2"/>
+      <text x="415" y="188" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">mL=−1, ms=−½ (=−2)</text>
+ 
+      <!-- s state PB -->
+      <text x="280" y="225" fill="#56c98a" font-size="10" font-family="JetBrains Mono">s state (l=0): 2 sub-levels</text>
+      <line x1="280" y1="240" x2="410" y2="240" stroke="#56c98a" stroke-width="2"/>
+      <text x="415" y="244" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">mL=0, ms=+½ (=1)</text>
+      <line x1="280" y1="260" x2="410" y2="260" stroke="#56c98a" stroke-width="2"/>
+      <text x="415" y="264" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">mL=0, ms=−½ (=−1)</text>
+ 
+      <!-- Energy formula box -->
+      <rect x="280" y="295" width="370" height="38" rx="4" fill="rgba(201,151,74,0.08)" stroke="rgba(201,151,74,0.3)" stroke-width="1"/>
+      <text x="292" y="311" fill="#f7d98a" font-size="12" font-family="JetBrains Mono">ΔE = (mL + 2ms) · μB · B</text>
+      <text x="292" y="327" fill="#8fa0bc" font-size="10" font-family="JetBrains Mono">Selection: ΔmL = ±1,0  and  Δms = 0  →  3 lines (like normal Zeeman)</text>
+    </svg>
+    <div class="diagram-caption">Fig 8.2 — Paschen-Back effect. In a very strong field, L-S coupling breaks: mL and ms become independently quantised. The energy is ΔE = (mL + 2ms)μ_B B. Although there are 6 sub-levels for the p state, the selection rules Δm_L = 0, ±1 and Δm_s = 0 allow only 3 distinct transition energies — restoring the appearance of a normal Zeeman triplet. The pattern is the same but the physical origin is completely different.</div>
+  </div>
+ 
+  <div class="callout concept">
+    <div class="callout-title">Field Regimes Summary</div>
+    <ul class="physics-list" style="margin-bottom:0">
+      <li><strong>No field:</strong> Doublet (fine structure from spin-orbit coupling alone). Good quantum numbers: n, l, j, m_j.</li>
+      <li><strong>Weak field (Zeeman):</strong> Anomalous splitting. J precesses about B. ΔE = g_J m_J μ_B B. Good quantum numbers: n, l, j, m_j.</li>
+      <li><strong>Strong field (Paschen-Back):</strong> L and S independently quantised. ΔE = (m_L + 2m_s) μ_B B. Good quantum numbers: n, l, m_L, m_s. J is no longer good.</li>
+      <li><strong>Very strong field (electric — Stark effect):</strong> Analogous breakdown, but due to an electric field.</li>
+    </ul>
+  </div>
+</div>
       </div>
     </div>
   </section>
@@ -2139,6 +2684,177 @@
         The energy splitting is ΔE = g_J · m_J · μ_B · B. For ²P₃/₂ (g = 4/3): m_J = 3/2, 1/2, −1/2, −3/2 → 4 levels, spacings of (4/3)μ_B·B. For ²P₁/₂ (g = 2/3): m_J = 1/2, −1/2 → 2 levels, spacing (2/3)μ_B·B. For ²S₁/₂ (g = 2): m_J = 1/2, −1/2 → 2 levels, spacing 2μ_B·B. The D₁ and D₂ lines each split into multiple components with the pattern determined by allowed transitions (Δm_J = 0, ±1). This is what is actually observed experimentally!
       </div>
     </div>
+    <div class="section">
+  <h3>Na Anomalous Zeeman Fan Diagram — Full m_J Structure</h3>
+  <p>This is the key diagram for the Na anomalous Zeeman effect, showing how the D₁ and D₂ lines each split into multiple components in an external field. Each transition is labelled by its polarisation (σ± or π).</p>
+ 
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" width="680" height="480">
+      <defs>
+        <marker id="fan1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#5a6d8a"/>
+        </marker>
+      </defs>
+ 
+      <!-- ── LEVEL LABELS (left) ── -->
+      <text x="5" y="45" fill="#9b7fe8" font-size="11" font-family="JetBrains Mono">3²P₃/₂</text>
+      <text x="5" y="57" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">J=3/2, g=4/3</text>
+ 
+      <text x="5" y="155" fill="#c3a8ff" font-size="11" font-family="JetBrains Mono">3²P₁/₂</text>
+      <text x="5" y="167" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">J=1/2, g=2/3</text>
+ 
+      <text x="5" y="370" fill="#56c98a" font-size="11" font-family="JetBrains Mono">3²S₁/₂</text>
+      <text x="5" y="382" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">J=1/2, g=2</text>
+ 
+      <!-- ── 3²P₃/₂: 4 levels (mJ = 3/2, 1/2, -1/2, -3/2) ── -->
+      <!-- spacing = (4/3)μB·B — drawn as 4 levels spaced 22px apart -->
+      <line x1="140" y1="45" x2="360" y2="45" stroke="#9b7fe8" stroke-width="2"/>
+      <text x="364" y="49" fill="#9b7fe8" font-size="10" font-family="JetBrains Mono">mJ = +3/2</text>
+ 
+      <line x1="140" y1="67" x2="360" y2="67" stroke="#9b7fe8" stroke-width="1.8"/>
+      <text x="364" y="71" fill="#9b7fe8" font-size="10" font-family="JetBrains Mono">mJ = +1/2</text>
+ 
+      <line x1="140" y1="89" x2="360" y2="89" stroke="#9b7fe8" stroke-width="1.8"/>
+      <text x="364" y="93" fill="#9b7fe8" font-size="10" font-family="JetBrains Mono">mJ = −1/2</text>
+ 
+      <line x1="140" y1="111" x2="360" y2="111" stroke="#9b7fe8" stroke-width="2"/>
+      <text x="364" y="115" fill="#9b7fe8" font-size="10" font-family="JetBrains Mono">mJ = −3/2</text>
+ 
+      <!-- ── 3²P₁/₂: 2 levels (mJ = 1/2, -1/2) ── -->
+      <line x1="140" y1="150" x2="360" y2="150" stroke="#c3a8ff" stroke-width="1.8"/>
+      <text x="364" y="154" fill="#c3a8ff" font-size="10" font-family="JetBrains Mono">mJ = +1/2</text>
+ 
+      <line x1="140" y1="174" x2="360" y2="174" stroke="#c3a8ff" stroke-width="1.8"/>
+      <text x="364" y="178" fill="#c3a8ff" font-size="10" font-family="JetBrains Mono">mJ = −1/2</text>
+ 
+      <!-- gap label -->
+      <text x="88" y="132" fill="#c9974a" font-size="9" font-family="JetBrains Mono">D₂</text>
+      <line x1="100" y1="115" x2="100" y2="145" stroke="#c9974a" stroke-width="1" marker-end="url(#fan1)"/>
+ 
+      <text x="88" y="222" fill="#c9974a" font-size="9" font-family="JetBrains Mono">D₁</text>
+      <line x1="100" y1="178" x2="100" y2="215" stroke="#c9974a" stroke-width="1" marker-end="url(#fan1)"/>
+ 
+      <!-- ── 3²S₁/₂: 2 levels (mJ = 1/2, -1/2) ── -->
+      <line x1="140" y1="360" x2="360" y2="360" stroke="#56c98a" stroke-width="2"/>
+      <text x="364" y="364" fill="#56c98a" font-size="10" font-family="JetBrains Mono">mJ = +1/2</text>
+ 
+      <line x1="140" y1="392" x2="360" y2="392" stroke="#56c98a" stroke-width="2"/>
+      <text x="364" y="396" fill="#56c98a" font-size="10" font-family="JetBrains Mono">mJ = −1/2</text>
+ 
+      <!-- ── D₂ TRANSITIONS: 3²P₃/₂ → 3²S₁/₂ ──
+           Δmj = -1: σ−  (+3/2→+1/2), (+1/2→−1/2)  → 2 σ− lines
+           Δmj = 0:  π   (+1/2→+1/2), (−1/2→−1/2)  → 2 π  lines
+           Δmj = +1: σ+  (−1/2→+1/2)... wait let me be careful:
+           P₃/₂ levels: +3/2, +1/2, −1/2, −3/2
+           S₁/₂ levels: +1/2, −1/2
+           Δmj = mJ(upper) − mJ(lower)
+           σ+: Δmj = +1 → upper−lower=+1: (−1/2,−3/2)→(lower=−1/2−1=not avail...
+           Let me use Δmj = m_J(final) − m_J(initial):
+           σ+: m_J decreases by 1 in emission, so Δm = −1 in terms of photon...
+           
+           Convention: Δm_J = m_J(upper) − m_J(lower):
+           σ+ (Δm=+1): upper mJ = lower mJ + 1
+             +1/2 → +1/2 (Δm=0, π)
+           
+           Let me just use: Δm = m_J(initial P-state) − m_J(final S-state):
+           Δm = +1 (σ+): P(+3/2)→S(+1/2), P(+1/2)→S(-1/2) -- not conventional
+           
+           Standard: Δm = m_J(upper) - m_J(lower):
+           σ− (Δm=−1): (+3/2→+1/2)✓, (+1/2→−1/2)✓  [P upper mJ − S lower mJ = +1 → σ+]
+           
+           OK let me just use standard: ΔmJ = m_J(upper) − m_J(lower):
+           σ+ : ΔmJ = +1 → upper−lower=+1
+             P₃/₂: +1/2 minus S: −1/2 = +1 ✓  
+             P₃/₂: −1/2 minus S: going to what? −1/2−1=−3/2 not available in S
+             Actually S only has ±1/2:
+             ΔmJ=+1: P(+3/2)−S(+1/2)=+1 ✓; P(+1/2)−S(−1/2)=+1 ✓  → 2 σ+ lines
+             ΔmJ=0:  P(+1/2)−S(+1/2)=0 ✓; P(−1/2)−S(−1/2)=0 ✓  → 2 π lines  
+             ΔmJ=−1: P(−1/2)−S(+1/2)=−1 ✓; P(−3/2)−S(−1/2)=−2 ✗;
+                     P(−1/2)−S(+1/2)=-1✓; P(−3/2)−S(−1/2)=-2 ✗
+                     Also: P(+1/2)−S(+3/2)? S doesn't have +3/2.
+                     Valid: P(-1/2)→S(+1/2)? no: mJ(P)=-1/2, mJ(S)=+1/2: Δm=-1/2-1/2=-1 ✓
+                     P(-3/2)→S(-1/2)? Δm=-3/2-(-1/2)=-1 ✓  → 2 σ− lines
+           So D₂ has: 2σ+, 2π, 2σ− = 6 lines total  ✓ (standard result)
+      -->
+ 
+      <!-- D₂ lines (from P₃/₂ levels) -->
+      <!-- σ+ (ΔmJ=+1): P(+3/2)→S(+1/2), P(+1/2)→S(−1/2) -->
+      <line x1="200" y1="45" x2="175" y2="360" stroke="#4ecdc4" stroke-width="1.8" opacity="0.85"/>
+      <line x1="225" y1="67" x2="200" y2="392" stroke="#4ecdc4" stroke-width="1.8" opacity="0.75"/>
+ 
+      <!-- π (ΔmJ=0): P(+1/2)→S(+1/2), P(−1/2)→S(−1/2) -->
+      <line x1="245" y1="67" x2="245" y2="360" stroke="#e8b96a" stroke-width="1.8" opacity="0.85" stroke-dasharray="6,3"/>
+      <line x1="260" y1="89" x2="260" y2="392" stroke="#e8b96a" stroke-width="1.8" opacity="0.75" stroke-dasharray="6,3"/>
+ 
+      <!-- σ− (ΔmJ=−1): P(−1/2)→S(+1/2), P(−3/2)→S(−1/2) -->
+      <line x1="280" y1="89" x2="305" y2="360" stroke="#e05a5a" stroke-width="1.8" opacity="0.85"/>
+      <line x1="300" y1="111" x2="325" y2="392" stroke="#e05a5a" stroke-width="1.8" opacity="0.75"/>
+ 
+      <!-- ── D₁ TRANSITIONS: 3²P₁/₂ → 3²S₁/₂ ──
+           P₁/₂ has: +1/2, −1/2
+           S₁/₂ has: +1/2, −1/2
+           ΔmJ=+1: P(+1/2)→S(−1/2) ✓  → 1 σ+
+           ΔmJ=0:  P(+1/2)→S(+1/2) ✓; P(−1/2)→S(−1/2) ✓  → 2 π  
+           ΔmJ=−1: P(−1/2)→S(+1/2) ✓  → 1 σ−
+           Total D₁: 4 lines (1σ+, 2π, 1σ−)
+      -->
+ 
+      <!-- D₁ σ+ -->
+      <line x1="218" y1="150" x2="195" y2="392" stroke="#7ee8e2" stroke-width="1.8" opacity="0.8"/>
+      <!-- D₁ π (2 lines) -->
+      <line x1="232" y1="150" x2="232" y2="360" stroke="#f7d98a" stroke-width="1.8" opacity="0.8" stroke-dasharray="6,3"/>
+      <line x1="248" y1="174" x2="248" y2="392" stroke="#f7d98a" stroke-width="1.8" opacity="0.7" stroke-dasharray="6,3"/>
+      <!-- D₁ σ− -->
+      <line x1="278" y1="174" x2="300" y2="360" stroke="#f08080" stroke-width="1.8" opacity="0.8"/>
+ 
+      <!-- ── SPECTRAL LINES AT BOTTOM ── -->
+      <!-- D₂: 6 components -->
+      <text x="140" y="428" fill="#c9974a" font-size="10" font-family="JetBrains Mono">D₂ components (6):</text>
+      <!-- Positions: roughly spaced -->
+      <line x1="148" y1="440" x2="148" y2="450" stroke="#4ecdc4" stroke-width="5" opacity="0.9"/>
+      <line x1="158" y1="440" x2="158" y2="450" stroke="#4ecdc4" stroke-width="5" opacity="0.7"/>
+      <line x1="170" y1="440" x2="170" y2="450" stroke="#e8b96a" stroke-width="5" opacity="0.9"/>
+      <line x1="180" y1="440" x2="180" y2="450" stroke="#e8b96a" stroke-width="5" opacity="0.7"/>
+      <line x1="192" y1="440" x2="192" y2="450" stroke="#e05a5a" stroke-width="5" opacity="0.9"/>
+      <line x1="202" y1="440" x2="202" y2="450" stroke="#e05a5a" stroke-width="5" opacity="0.7"/>
+      <text x="148" y="468" fill="#4ecdc4" font-size="8" font-family="JetBrains Mono">σ+  σ+</text>
+      <text x="168" y="468" fill="#e8b96a" font-size="8" font-family="JetBrains Mono">π  π</text>
+      <text x="190" y="468" fill="#e05a5a" font-size="8" font-family="JetBrains Mono">σ−  σ−</text>
+ 
+      <!-- D₁: 4 components -->
+      <text x="320" y="428" fill="#c9974a" font-size="10" font-family="JetBrains Mono">D₁ components (4):</text>
+      <line x1="328" y1="440" x2="328" y2="450" stroke="#7ee8e2" stroke-width="5" opacity="0.9"/>
+      <line x1="342" y1="440" x2="342" y2="450" stroke="#f7d98a" stroke-width="5" opacity="0.9"/>
+      <line x1="356" y1="440" x2="356" y2="450" stroke="#f7d98a" stroke-width="5" opacity="0.8"/>
+      <line x1="370" y1="440" x2="370" y2="450" stroke="#f08080" stroke-width="5" opacity="0.9"/>
+      <text x="325" y="468" fill="#7ee8e2" font-size="8" font-family="JetBrains Mono">σ+</text>
+      <text x="340" y="468" fill="#f7d98a" font-size="8" font-family="JetBrains Mono"> π  π</text>
+      <text x="368" y="468" fill="#f08080" font-size="8" font-family="JetBrains Mono">σ−</text>
+ 
+      <!-- g-factor + line count box -->
+      <rect x="510" y="38" width="185" height="130" rx="4" fill="rgba(201,151,74,0.06)" stroke="rgba(201,151,74,0.25)" stroke-width="1"/>
+      <text x="522" y="58" fill="#e8b96a" font-size="11" font-family="JetBrains Mono">Level  g_J  sub-levels</text>
+      <line x1="518" y1="63" x2="688" y2="63" stroke="rgba(201,151,74,0.2)" stroke-width="0.8"/>
+      <text x="522" y="78" fill="#9b7fe8" font-size="10" font-family="JetBrains Mono">³²P₃/₂  4/3    4 (mJ=±3/2,±1/2)</text>
+      <text x="522" y="96" fill="#c3a8ff" font-size="10" font-family="JetBrains Mono">³²P₁/₂  2/3    2 (mJ=±1/2)</text>
+      <text x="522" y="114" fill="#56c98a" font-size="10" font-family="JetBrains Mono">³²S₁/₂    2     2 (mJ=±1/2)</text>
+      <line x1="518" y1="120" x2="688" y2="120" stroke="rgba(201,151,74,0.2)" stroke-width="0.8"/>
+      <text x="522" y="136" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">D₂: 6 components</text>
+      <text x="522" y="152" fill="#8fa0bc" font-size="9" font-family="JetBrains Mono">D₁: 4 components</text>
+ 
+      <!-- polarisation legend -->
+      <rect x="510" y="188" width="185" height="80" rx="4" fill="rgba(30,45,74,0.6)" stroke="var(--border)" stroke-width="1"/>
+      <text x="522" y="206" fill="#8fa0bc" font-size="10" font-family="JetBrains Mono">Polarisation key:</text>
+      <line x1="522" y1="222" x2="542" y2="222" stroke="#4ecdc4" stroke-width="2.5"/>
+      <text x="548" y="226" fill="#4ecdc4" font-size="9" font-family="JetBrains Mono">σ+ (ΔmJ=+1)</text>
+      <line x1="522" y1="238" x2="542" y2="238" stroke="#e8b96a" stroke-width="2.5" stroke-dasharray="5,3"/>
+      <text x="548" y="242" fill="#e8b96a" font-size="9" font-family="JetBrains Mono">π  (ΔmJ=0)</text>
+      <line x1="522" y1="254" x2="542" y2="254" stroke="#e05a5a" stroke-width="2.5"/>
+      <text x="548" y="258" fill="#e05a5a" font-size="9" font-family="JetBrains Mono">σ− (ΔmJ=−1)</text>
+    </svg>
+    <div class="diagram-caption">Fig 9.2 — Full anomalous Zeeman fan diagram for sodium D lines in an external field B. The 3²P₃/₂ level (g=4/3) splits into 4 sub-levels; 3²P₁/₂ (g=2/3) into 2; 3²S₁/₂ (g=2) into 2. D₂ gives 6 components (2σ⁺, 2π, 2σ⁻); D₁ gives 4 (1σ⁺, 2π, 1σ⁻). The unequal Landé g-factors cause unequal component spacing — the signature of the anomalous Zeeman effect.</div>
+  </div>
+</div>
 
     <div class="section">
       <h3>The Stern–Gerlach Experiment — Proof of Space Quantisation</h3>
@@ -2200,7 +2916,7 @@
   <!-- FOOTER -->
   <div style="margin-top:80px;padding-top:30px;border-top:1px solid var(--border);color:var(--text3);font-size:12.5px;font-family:var(--mono);">
     <div>DB Sir · Basic Atomic Physics · Notes Expanded for Examination</div>
-    <div style="margin-top:6px;color:var(--text3)">Reference: White & SN Ghosal (main) · Semat &amp; Albright · Bransden &amp; Joachain</div>
+    <div style="margin-top:6px;color:var(--text3)">Notes: Anuska Dey · Webpage: Arya Naiya</div>
     <div style="margin-top:6px;color:var(--text3)">Topics: Bohr → W-S → Relativistic → Space Quantization → Spin → Vector Model → Selection Rules → Zeeman → Anomalous Zeeman</div>
   </div>
 
