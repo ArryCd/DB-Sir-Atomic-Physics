@@ -6,6 +6,7 @@
 <title>Atomic Physics — DB Sir Class Notes (Expanded)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <style>
   :root {
     --bg:        #080c14;
@@ -564,15 +565,269 @@
   }
   .toc-dot:hover { color: var(--gold2); border-color: var(--gold); background: rgba(201,151,74,0.06); }
 
+  /* ─── MOBILE TOP BAR ─── */
+  #mobile-bar {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    z-index: 200;
+    align-items: center;
+    padding: 0 16px;
+    gap: 14px;
+  }
+  #mobile-bar .mob-title {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--gold2);
+    letter-spacing: 1.5px;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #hamburger {
+    background: none;
+    border: 1px solid var(--border2);
+    border-radius: 5px;
+    width: 36px; height: 36px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0;
+    flex-shrink: 0;
+  }
+  #hamburger span {
+    display: block;
+    width: 18px; height: 1.5px;
+    background: var(--gold2);
+    border-radius: 2px;
+    transition: all 0.25s;
+  }
+  body.nav-open #hamburger span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  body.nav-open #hamburger span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  body.nav-open #hamburger span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* Overlay behind sidebar when open on mobile */
+  #nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 99;
+    backdrop-filter: blur(2px);
+  }
+  body.nav-open #nav-overlay { display: block; }
+
+  /* Sommerfeld collapsible */
+  .somm-toggle {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 14px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 28px 0 0;
+    color: var(--gold2);
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-align: left;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .somm-toggle:hover { background: var(--bg4); border-color: var(--gold); }
+  .somm-toggle-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: var(--gold);
+    flex-shrink: 0;
+    transition: transform 0.3s;
+  }
+  .somm-toggle.open .somm-toggle-icon { transform: rotate(90deg); }
+  .somm-toggle-label { flex: 1; }
+  .somm-toggle-sub {
+    font-size: 10.5px;
+    color: var(--text3);
+    display: block;
+    margin-top: 2px;
+    font-family: var(--body);
+    font-style: italic;
+    letter-spacing: 0;
+  }
+  .somm-badge {
+    font-size: 9.5px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(201,151,74,0.12);
+    border: 1px solid rgba(201,151,74,0.3);
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .somm-body {
+    display: none;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding: 28px 28px 24px;
+    background: var(--bg2);
+    margin-bottom: 28px;
+  }
+  .somm-body.open { display: block; }
+
+  /* Sommerfeld inner styles — scoped */
+  .somm-body .sb-step {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+  .somm-body .sb-step-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--gold2);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .somm-body .sb-badge {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--bg4);
+    border: 1px solid var(--border2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--text2);
+    flex-shrink: 0;
+  }
+  .somm-body p {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.75;
+    margin-bottom: 10px;
+    font-family: var(--body);
+  }
+  .somm-body .sb-eq {
+    background: rgba(201,151,74,0.07);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 5px 5px 0;
+    padding: 12px 16px;
+    margin: 12px 0;
+    overflow-x: auto;
+    color: var(--text);
+    font-size: 15px;
+  }
+  .somm-body .sb-result {
+    background: rgba(78,205,196,0.07);
+    border: 1px solid rgba(78,205,196,0.25);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    text-align: center;
+    overflow-x: auto;
+    color: var(--text);
+    font-size: 15px;
+  }
+  .somm-body .sb-note {
+    font-size: 12.5px;
+    color: var(--text3);
+    font-style: italic;
+    margin-top: 6px;
+    font-family: var(--body);
+  }
+  .somm-body .sb-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .somm-body .sb-mini {
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 12px 14px;
+  }
+  .somm-body .sb-mini-label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--text3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .somm-body .sb-sum {
+    background: var(--bg4);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin-top: 20px;
+  }
+  .somm-body .sb-sum-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .somm-body table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .somm-body table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: top;
+  }
+  .somm-body table td:first-child { color: var(--text); font-family: var(--body); }
+  .somm-body table tr:last-child td { border-bottom: none; }
+  .somm-body svg text { font-family: 'JetBrains Mono', monospace; }
+
   @media (max-width: 900px) {
-    #sidebar { transform: translateX(-100%); }
-    #main { margin-left: 0; padding: 0 20px 80px; }
+    #mobile-bar { display: flex; }
+    #sidebar {
+      transform: translateX(-100%);
+      top: 0;
+      z-index: 150;
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    }
+    body.nav-open #sidebar { transform: translateX(0); }
+    #main { margin-left: 0; padding: 52px 16px 80px; }
     .two-col, .two-col-3 { grid-template-columns: 1fr; }
-    #hero h1 { font-size: 36px; }
+    #hero h1 { font-size: 32px; }
+    #hero { padding: 28px 0 32px; }
+    .lec-num { font-size: 52px; }
+    .somm-body .sb-two-col { grid-template-columns: 1fr; }
+    .somm-body { padding: 18px 14px; }
   }
 </style>
 </head>
 <body>
+
+<!-- ═══ MOBILE TOP BAR ═══ -->
+<div id="mobile-bar">
+  <button id="hamburger" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+  <span class="mob-title">Atomic Physics · DB Sir</span>
+</div>
+<div id="nav-overlay"></div>
 
 <!-- ═══ SIDEBAR ═══ -->
 <nav id="sidebar">
@@ -1139,6 +1394,152 @@
         If k = 0, then P_φ = 0, which means there is no angular momentum — the orbit degenerates to a straight line through the nucleus (b = 0). The electron would plunge straight into the nucleus, which is classically and physically forbidden. Hence k starts from 1.
       </div>
     </div>
+
+    <!-- SOMMERFELD COLLAPSIBLE -->
+    <button class="somm-toggle" id="somm-btn" aria-expanded="false" aria-controls="somm-body">
+      <span class="somm-toggle-icon">▶</span>
+      <span class="somm-toggle-label">
+        Sommerfeld Elliptic Orbits — Complete Step-by-Step Derivation
+        <span class="somm-toggle-sub">Polar orbit equation · Phase integrals · b/a = k/n · Energy levels · Fine structure</span>
+      </span>
+      <span class="somm-badge">8 Steps + Summary</span>
+    </button>
+    <div class="somm-body" id="somm-body">
+
+      <!-- SVG orbit diagram -->
+      <div class="diagram-wrap" style="margin-bottom:24px">
+        <svg viewBox="0 0 560 310" xmlns="http://www.w3.org/2000/svg" width="520" height="310">
+          <!-- n=3 orbits: k=3 (circle), k=2 (medium ellipse), k=1 (thin ellipse) -->
+          <!-- All share same semi-major axis a. Nucleus at left focus. -->
+          <!-- a=160, centre at (240,155) -->
+          <!-- k=3 (circle): r=160 -->
+          <circle cx="240" cy="155" r="160" fill="none" stroke="#378ADD" stroke-width="1.6"/>
+          <!-- k=2: b/a=2/3, b=107, c=sqrt(160²-107²)=120, nucleus at (240-120,155)=(120,155) -->
+          <ellipse cx="240" cy="155" rx="160" ry="107" fill="none" stroke="#1D9E75" stroke-width="1.5" stroke-dasharray="8 2"/>
+          <!-- k=1: b/a=1/3, b=53, c=sqrt(160²-53²)=151, nucleus at (240-151,155)=(89,155) -->
+          <ellipse cx="240" cy="155" rx="160" ry="53" fill="none" stroke="#D85A30" stroke-width="1.4" stroke-dasharray="5 2"/>
+
+          <!-- Nucleus dot (approx left focus for k=1 most eccentric case, ≈ left edge area) -->
+          <circle cx="89" cy="155" r="7" fill="#e8b96a"/>
+          <text x="96" y="148" font-size="11" fill="#e8b96a" font-family="JetBrains Mono">+Ze</text>
+
+          <!-- Semi-major axis label -->
+          <line x1="89" y1="175" x2="400" y2="175" stroke="#5a6d8a" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <text x="230" y="190" font-size="11" fill="#5a6d8a" font-family="JetBrains Mono">a (same for all, fixed by n)</text>
+
+          <!-- Legend -->
+          <line x1="350" y1="240" x2="374" y2="240" stroke="#378ADD" stroke-width="1.6"/>
+          <text font-size="11" fill="#8fa0bc" x="380" y="244" font-family="JetBrains Mono">k = n (circle, b/a = 1)</text>
+          <line x1="350" y1="256" x2="374" y2="256" stroke="#1D9E75" stroke-width="1.5" stroke-dasharray="8 2"/>
+          <text font-size="11" fill="#8fa0bc" x="380" y="260" font-family="JetBrains Mono">k = n−1  (b/a = (n−1)/n)</text>
+          <line x1="350" y1="272" x2="374" y2="272" stroke="#D85A30" stroke-width="1.4" stroke-dasharray="5 2"/>
+          <text font-size="11" fill="#8fa0bc" x="380" y="276" font-family="JetBrains Mono">k = 1  (most eccentric)</text>
+
+          <text x="10" y="298" font-size="10.5" fill="#5a6d8a" font-family="JetBrains Mono" font-style="italic">For n = 3: three orbits k = 1, 2, 3 — same energy, different shapes.</text>
+        </svg>
+        <div class="diagram-caption">Fig 2.2 — Sommerfeld's allowed elliptic orbits for n = 3. All share the same semi-major axis a (hence same energy), but differ in eccentricity. The nucleus sits at the left focus.</div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="sb-step">
+        <div class="sb-step-title"><span class="sb-badge">1</span>Why elliptic orbits? Setting up coordinates</div>
+        <p>The Coulomb force is $F \propto 1/r^2$ — exactly like gravity. By Kepler's laws, bound orbits are ellipses with the nucleus at one focus. A circular orbit is the special case where both foci coincide ($\varepsilon = 0$). The electron's position in the orbital plane needs <strong>two</strong> polar coordinates $(r, \theta)$, which vary periodically — $\theta$ goes $0 \to 2\pi$ per revolution while $r$ oscillates between perihelion and aphelion.</p>
+        <div class="sb-eq">$$r = \frac{a(1-\varepsilon^2)}{1 + \varepsilon \cos\theta}, \qquad \sqrt{1-\varepsilon^2} = \frac{b}{a}$$</div>
+        <p class="sb-note">$a$ = semi-major axis, $b$ = semi-minor axis, $\varepsilon$ = eccentricity ($0 \leq \varepsilon < 1$).</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="sb-step">
+        <div class="sb-step-title"><span class="sb-badge">2</span>Wilson–Sommerfeld quantum conditions (1916)</div>
+        <p>Wilson and Sommerfeld generalised Bohr's single quantum condition to <em>every</em> periodically varying coordinate. For generalised coordinate $q$ with conjugate momentum $p_q$:</p>
+        <div class="sb-result">$$\oint p_q\, dq = n_q\, h, \qquad n_q \in \mathbb{Z}^+$$</div>
+        <p>The $\oint$ is over one complete cycle. This equals the area enclosed in the $(q, p_q)$ phase space. For the elliptic orbit, two pairs of conjugate variables give two separate conditions:</p>
+        <div class="sb-eq">$$\oint p_r\, dr = n_r\, h \quad \text{(radial)}, \qquad \oint p_\theta\, d\theta = k\, h \quad \text{(azimuthal)}$$</div>
+        <p class="sb-note">$n_r$ = radial quantum number; $k$ = azimuthal quantum number. Both are positive integers.</p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="sb-step">
+        <div class="sb-step-title"><span class="sb-badge">3</span>Azimuthal condition → $p_\theta = k\hbar$</div>
+        <p>Angular momentum $p_\theta$ is conserved (central Coulomb force), so it's constant throughout the orbit. The azimuthal integral is trivial:</p>
+        <div class="sb-eq">$$\oint p_\theta\, d\theta = p_\theta \int_0^{2\pi} d\theta = 2\pi\, p_\theta = k\,h \implies \boxed{p_\theta = k\hbar}$$</div>
+        <p>This is exactly <strong>Bohr's original quantisation condition</strong>. For circular orbits ($\varepsilon = 0$, $n_r = 0$) this is the only condition, with $k = n$. W-S contains Bohr as a special case.</p>
+        <p class="sb-note">$k \geq 1$: if $k = 0$ then $p_\theta = 0$, the orbit degenerates to a radial line through the nucleus — unphysical.</p>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="sb-step">
+        <div class="sb-step-title"><span class="sb-badge">4</span>Setting up the radial action integral</div>
+        <p>The radial momentum is $p_r = m\dot{r}$. Using $\dot{\theta} = p_\theta/(mr^2)$ from angular momentum conservation:</p>
+        <div class="sb-eq">$$p_r = m\frac{dr}{d\theta}\cdot\dot{\theta} = \frac{p_\theta}{r^2}\frac{dr}{d\theta}$$</div>
+        <p>Substituting into $\oint p_r\,dr$, changing variable from $r$ to $\theta$ (via $dr = (dr/d\theta)\,d\theta$):</p>
+        <div class="sb-eq">$$n_r h = \oint p_r\,dr = p_\theta \oint \left(\frac{1}{r}\frac{dr}{d\theta}\right)^{\!2} d\theta$$</div>
+        <p>Differentiating the orbit equation with respect to $\theta$:</p>
+        <div class="sb-eq">$$\frac{1}{r}\frac{dr}{d\theta} = \frac{\varepsilon\sin\theta}{1+\varepsilon\cos\theta} \implies n_r h = p_\theta \oint \frac{\varepsilon^2\sin^2\theta}{\left(1+\varepsilon\cos\theta\right)^2}\,d\theta \;=\; p_\theta \cdot I$$</div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="sb-step">
+        <div class="sb-step-title"><span class="sb-badge">5</span>Evaluating the integral $I$ — integration by parts</div>
+        <p>Write $\sin^2\theta = 1 - \cos^2\theta$ and integrate by parts. The boundary term vanishes (periodicity), leaving:</p>
+        <div class="sb-eq">$$I = \int_0^{2\pi}\left(\frac{1}{1+\varepsilon\cos\theta} - 1\right)d\theta$$</div>
+        <p>Using the standard result $\displaystyle\int_0^{2\pi}\!\frac{d\theta}{1+\varepsilon\cos\theta} = \frac{2\pi}{\sqrt{1-\varepsilon^2}}$:</p>
+        <div class="sb-result">$$I = \frac{2\pi}{\sqrt{1-\varepsilon^2}} - 2\pi = 2\pi\!\left(\frac{1}{\sqrt{1-\varepsilon^2}} - 1\right)$$</div>
+        <p>Substituting $p_\theta = k\hbar$ and $n_rh = p_\theta \cdot I$:</p>
+        <div class="sb-result">$$n_r h = kh\left(\frac{1}{\sqrt{1-\varepsilon^2}} - 1\right) \implies \frac{1}{\sqrt{1-\varepsilon^2}} = 1 + \frac{n_r}{k} = \frac{n_r + k}{k}$$</div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="sb-step">
+        <div class="sb-step-title"><span class="sb-badge">6</span>Principal quantum number and orbital shapes</div>
+        <p>Define $n \equiv n_r + k$ (the principal quantum number). Then:</p>
+        <div class="sb-result">$$\frac{1}{\sqrt{1-\varepsilon^2}} = \frac{n}{k} \implies \sqrt{1-\varepsilon^2} = \frac{k}{n} \implies \boxed{\frac{b}{a} = \frac{k}{n}}$$</div>
+        <p>The <strong>shape of the orbit is completely fixed by the ratio $k/n$</strong>. Since $b \leq a$, we need $k \leq n$. For each $n$ there are $n$ allowed values of $k$: $k = 1, 2, \ldots, n$.</p>
+        <div class="sb-two-col">
+          <div class="sb-mini">
+            <div class="sb-mini-label">Azimuthal QN k</div>
+            <p>$k = 1, 2, \ldots, n$<br>$k = n$ → circle ($b/a = 1$)<br>$k = 1$ → most eccentric<br>$k = 0$ → excluded</p>
+          </div>
+          <div class="sb-mini">
+            <div class="sb-mini-label">Radial QN $n_r$</div>
+            <p>$n_r = n - k$<br>$= (n-1), (n-2), \ldots, 0$<br>$n_r = 0$ → circular<br>$n_r$ counts radial nodes</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="sb-step">
+        <div class="sb-step-title"><span class="sb-badge">7</span>Energy — depends only on $n$, not $k$</div>
+        <p>Substituting the total energy expression $E = p_r^2/2m + p_\theta^2/2mr^2 - Ze^2/4\pi\epsilon_0 r$ and the orbit equation, then equating coefficients of different powers of $1/r$, two relations emerge. These give $a = 4\pi\epsilon_0 n^2\hbar^2/mZe^2$ (the Bohr radius for principal quantum number $n$), and:</p>
+        <div class="sb-result">$$\boxed{E_n = -\frac{mZ^2 e^4}{32\pi^2\epsilon_0^2\, n^2\hbar^2} = -\frac{Z^2 \cdot 13.6\,\text{eV}}{n^2}}$$</div>
+        <p style="text-align:center;color:var(--cyan);font-size:13.5px">The energy depends <em>only</em> on $n$ — not on $k$. All $n$ orbits with the same $n$ are degenerate. This is identical to Bohr's result.</p>
+      </div>
+
+      <!-- Step 8 -->
+      <div class="sb-step">
+        <div class="sb-step-title"><span class="sb-badge">8</span>Relativistic correction → Fine structure</div>
+        <p><strong>Degeneracy and its breaking:</strong> All $n$ elliptic orbits for a given $n$ have the same non-relativistic energy because the periods of $r$ and $\theta$ are exactly equal in the pure Coulomb field. This is the classical commensurate-period degeneracy.</p>
+        <p><strong>Relativistic mass variation:</strong> Near perihelion the electron moves faster, so $m = m_0/\sqrt{1-v^2/c^2}$ increases. This causes the major axis to precess slowly — the orbit traces a <em>rosette</em>. The correction depends on both $n$ and $k$:</p>
+        <div class="sb-eq">$$E_{n,k} \approx E_n\left[1 + \frac{Z^2\alpha^2}{n^2}\!\left(\frac{n}{k} - \frac{3}{4}\right)\right], \qquad \alpha = \frac{e^2}{4\pi\epsilon_0 \hbar c} \approx \frac{1}{137}$$</div>
+        <p>Since the correction depends on $k$, the degeneracy is broken. Each principal level $n$ splits into $n$ closely-spaced sub-levels → <strong>fine structure</strong>. Only $\Delta k = \pm 1$ transitions are allowed (selection rule).</p>
+        <p class="sb-note">The observed splitting still doesn't fully match this prediction — a complete explanation requires electron spin and QED.</p>
+      </div>
+
+      <!-- Summary table -->
+      <div class="sb-sum">
+        <div class="sb-sum-label">Summary of Key Results</div>
+        <table>
+          <tr><td>Azimuthal quantum condition</td><td>$p_\theta = k\hbar$, &nbsp; $k = 1, 2, \ldots, n$</td></tr>
+          <tr><td>Principal quantum number</td><td>$n = n_r + k$, &nbsp; $n_r = 0, 1, 2, \ldots$</td></tr>
+          <tr><td>Orbit shape</td><td>$b/a = k/n$, &nbsp; $\varepsilon = \sqrt{1-(k/n)^2}$</td></tr>
+          <tr><td>Semi-major axis</td><td>$a = 4\pi\epsilon_0 n^2\hbar^2 / mZe^2$ &nbsp; (= Bohr radius)</td></tr>
+          <tr><td>Energy (non-relativistic)</td><td>$E_n = -Z^2 \cdot 13.6\,\text{eV} / n^2$ &nbsp; (degenerate in $k$)</td></tr>
+          <tr><td>Fine-structure constant</td><td>$\alpha = e^2/4\pi\epsilon_0 \hbar c \approx 1/137$</td></tr>
+          <tr><td>Relativistic correction</td><td>Breaks $k$-degeneracy, $\Delta E \sim (Z\alpha)^2 E_n$</td></tr>
+        </table>
+      </div>
+
+    </div><!-- end somm-body -->
 
     <!-- Q&A L2 -->
     <div class="qa-section">
@@ -2922,20 +3323,52 @@
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script>
-  // Accordion for Q&A
+  // ── Accordion for Q&A ──
   document.querySelectorAll('.qa-q').forEach(q => {
     q.addEventListener('click', () => {
       const item = q.parentElement;
       const isOpen = item.classList.contains('open');
-      // Close all
       document.querySelectorAll('.qa-item.open').forEach(i => i.classList.remove('open'));
-      // Toggle
       if (!isOpen) item.classList.add('open');
     });
   });
 
-  // Active nav on scroll
+  // ── Sommerfeld collapsible ──
+  let katexRendered = false;
+  const sommBtn  = document.getElementById('somm-btn');
+  const sommBody = document.getElementById('somm-body');
+  sommBtn.addEventListener('click', () => {
+    const isOpen = sommBody.classList.contains('open');
+    sommBody.classList.toggle('open', !isOpen);
+    sommBtn.classList.toggle('open', !isOpen);
+    sommBtn.setAttribute('aria-expanded', String(!isOpen));
+    if (!isOpen && !katexRendered) {
+      renderMathInElement(sommBody, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$',  right: '$',  display: false}
+        ],
+        throwOnError: false
+      });
+      katexRendered = true;
+    }
+  });
+
+  // ── Mobile hamburger ──
+  const hamburger = document.getElementById('hamburger');
+  const overlay   = document.getElementById('nav-overlay');
+  hamburger.addEventListener('click', () => document.body.classList.toggle('nav-open'));
+  overlay.addEventListener('click',   () => document.body.classList.remove('nav-open'));
+  document.querySelectorAll('#sidebar .nav-item').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 900) document.body.classList.remove('nav-open');
+    });
+  });
+
+  // ── Active nav on scroll ──
   const sections = document.querySelectorAll('.lecture, #hero');
   const navLinks = document.querySelectorAll('.nav-item');
   const observer = new IntersectionObserver(entries => {
